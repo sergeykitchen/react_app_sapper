@@ -1,9 +1,9 @@
 import React from "react";
 import "./styles.scss";
 
-export const SetGameParams = React.memo(({ onChange, params }) => {
+export const SetGameParams = React.memo(({ onChange, params, isStart }) => {
   return (
-    <div className="params">
+    <div className={`params ${isStart ? "disabled" : ""}`}>
       <label>
         SET WIDTH
         <input

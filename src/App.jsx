@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { SetGameParams } from "./components/SetGameParams";
 import { Field } from "./components/Field";
-import { useFieldData } from "./hooks/fieldData";
+import { useGame } from "./hooks/gameHook";
+import { GameStatus } from "./components/GameStatus";
 
 const defaultParams = {
-  width: 10,
-  height: 10,
-  bombs: 1
+  width: 20,
+  height: 20,
+  bombs: 10
 };
 
 export const App = () => {
   const [params, setParams] = useState(defaultParams);
 
-  const { rows, getRows, openCell, setFlag } = useFieldData({
-    ...params
-  });
+  const { rows, getRows, openCell, setFlag, time, isStart, bombs } = useGame(
+    params
+  );
 
   useEffect(() => {
     getRows();
@@ -48,7 +49,11 @@ export const App = () => {
 
   return (
     <div className="field">
-      <SetGameParams params={params} onChange={changeHandler} />
+      <SetGameParams
+        isStart={isStart}
+        params={params}
+        onChange={changeHandler}
+      />
       <button onClick={startGame} className="button">
         NEW GAME
       </button>
@@ -57,6 +62,7 @@ export const App = () => {
         clickHandler={clickHandler}
         rows={rows}
       />
+      <GameStatus bombs={bombs} time={time} />
     </div>
   );
 };

@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-export const useFieldData = params => {
+let timer = null;
+
+const convertTime = seconds => {
+  const date = new Date(null);
+  date.setSeconds(seconds); // specify value for SECONDS here
+  return date.toISOString().substr(11, 8);
+};
+
+export const useGame = params => {
   const [rowsData, setRows] = useState([]);
+  const [isStart, setIsStart] = useState(false);
+  const [time, setTime] = useState(0);
+  const [bombs, setBombs] = useState(params.bombs);
 
-  const getRows = () => {
+  const getRows = useCallback(() => {
     const { bombs, width, height } = params;
+    setBombs(bombs);
     let count = 0;
     const rows = [];
     let bombNumbers = [];
@@ -64,7 +76,7 @@ export const useFieldData = params => {
       }
     }
     setRows(rows);
-  };
+  }, [params]);
 
   const gameOver = () => {
     for (let i = 0; i < rowsData.length; i++) {
@@ -73,13 +85,13 @@ export const useFieldData = params => {
       }
     }
     setRows([...rowsData]);
+    setIsStart(false);
   };
 
-  function openCells(arr, i, j) {
+  const openCells = (arr, i, j) => {
     if (arr[i][j].isOpen) return;
     arr[i][j].isOpen = true;
-    if (arr[i][j].flag) flags++;
-
+    // if (arr[i][j].flag) flags++;
     for (
       var k = Math.max(0, i - 1);
       k <= Math.min(i + 1, arr.length - 1);
@@ -97,7 +109,7 @@ export const useFieldData = params => {
         openCells(arr, k, l);
       }
     }
-  }
+  };
 
   const openEmptyCells = (row, cell) => {
     if (cell.isOpen) return;
@@ -108,36 +120,66 @@ export const useFieldData = params => {
     setRows(copy);
   };
 
-  const openCell = id => {
-    const [row, cell] = id.split("");
-    const desiredCell = rowsData[row][cell];
-    if (desiredCell.isOpen) {
+  const openCell = clickedCell => {
+    setIsStart(true);
+    const { row, cell } = clickedCell;
+    if (clickedCell.isOpen) {
       return;
     }
-    if (desiredCell.isBomb) {
+    if (clickedCell.isBomb) {
       gameOver();
       return;
     }
 
-    if (!desiredCell.value) {
+    if (!clickedCell.value) {
       openEmptyCells(+row, +cell);
       return;
     }
 
-    desiredCell.isOpen = true;
+    //desiredCell.isOpen = true;
+    clickedCell.isOpen = true;
     setRows([...rowsData]);
   };
 
-  const setFlag = id => {
-    const [row, cell] = id.split("");
+  const setFlag = clickedCell => {
+    const { row, cell } = clickedCell;
     if (rowsData[row][cell].isOpen) {
       return;
     }
-    rowsData[row][cell].flag = !rowsData[row][cell].flag;
+
+    let computedBombs;
+    if (rowsData[row][cell].flag) {
+      rowsData[row][cell].flag = false;
+      computedBombs = bombs + 1;
+    } else {
+      rowsData[row][cell].flag = true;
+      computedBombs = bombs - 1;
+    }
+
     setRows([...rowsData]);
+    setBombs(Math.max(0, computedBombs));
   };
 
-  return { rows: rowsData, getRows, openCell, setFlag };
+  useEffect(() => {
+    if (isStart) {
+      timer = setInterval(() => {
+        setTime(time + 1);
+      }, 1000);
+    } else {
+      setTime(0);
+    }
+    return () => clearInterval(timer);
+  }, [time, isStart]);
+
+  return {
+    rows: rowsData,
+    getRows,
+    openCell,
+    setFlag,
+    time: convertTime(time),
+    isStart,
+    bombs
+  };
 };
 
 // noBombCells = width * height - bombNumbers.length;

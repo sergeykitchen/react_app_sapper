@@ -40,8 +40,8 @@ export const Field = ({ rows, clickHandler, leftClickHandler }) => {
 
             return (
               <td
-                onClick={onClick(cell.id)}
-                onContextMenu={onContextMenu(cell.id)}
+                onClick={onClick(cell)}
+                onContextMenu={onContextMenu(cell)}
                 className={`cell ${additionClass}`}
                 key={index}
                 style={{ color: color }}
@@ -56,7 +56,7 @@ export const Field = ({ rows, clickHandler, leftClickHandler }) => {
   };
 
   return (
-    <table>
+    <table className="game_field">
       <tbody>{getTable(rows)}</tbody>
     </table>
   );

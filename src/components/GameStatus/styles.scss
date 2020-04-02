@@ -1,0 +1,12 @@
+.status_table {
+  width: 100%;
+  td {
+    font-size: 15px;
+    &:first-child {
+      text-align: left;
+    }
+    &:last-child {
+      text-align: right;
+    }
+  }
+}

@@ -11,7 +11,7 @@ body {
 }
 .field {
   position: relative;
-  width: 330px;
+  // width: 330px;
   cursor: default;
   margin: 20px auto;
 }
@@ -34,7 +34,7 @@ body {
 
 /* ************ */
 
-table {
+.game_field {
   margin: 10px auto;
   border-collapse: collapse;
   background: url("./images/grass.jpg");
