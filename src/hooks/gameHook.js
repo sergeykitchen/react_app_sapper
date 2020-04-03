@@ -13,8 +13,11 @@ export const useGame = params => {
   const [isStart, setIsStart] = useState(false);
   const [time, setTime] = useState(0);
   const [bombs, setBombs] = useState(params.bombs);
+  const [disableParams, setDisableParams] = useState(false);
 
   const getRows = useCallback(() => {
+    setTime(0);
+    setDisableParams(true);
     const { bombs, width, height } = params;
     setBombs(bombs);
     let count = 0;
@@ -85,7 +88,8 @@ export const useGame = params => {
       }
     }
     setRows([...rowsData]);
-    setIsStart(false);
+    //  setIsStart(false);
+    setDisableParams(false);
   };
 
   const openCells = (arr, i, j) => {
@@ -113,7 +117,6 @@ export const useGame = params => {
 
   const openEmptyCells = (row, cell) => {
     if (cell.isOpen) return;
-
     const copy = [...rowsData];
     openCells(copy, row, cell);
 
@@ -161,15 +164,13 @@ export const useGame = params => {
   };
 
   useEffect(() => {
-    if (isStart) {
+    if (disableParams) {
       timer = setInterval(() => {
         setTime(time + 1);
       }, 1000);
-    } else {
-      setTime(0);
     }
     return () => clearInterval(timer);
-  }, [time, isStart]);
+  }, [time, disableParams]);
 
   return {
     rows: rowsData,
@@ -178,7 +179,9 @@ export const useGame = params => {
     setFlag,
     time: convertTime(time),
     isStart,
-    bombs
+    bombs,
+    disableParams,
+    setIsStart
   };
 };
 

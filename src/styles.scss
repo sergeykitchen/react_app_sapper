@@ -30,6 +30,12 @@ body {
   &:hover {
     letter-spacing: 2px;
   }
+  &:disabled {
+    opacity: 0.3;
+    &:hover {
+      letter-spacing: initial;
+    }
+  }
 }
 
 /* ************ */
@@ -38,6 +44,9 @@ body {
   margin: 10px auto;
   border-collapse: collapse;
   background: url("./images/grass.jpg");
+  &.fake {
+    opacity: 0.5;
+  }
 }
 
 td {

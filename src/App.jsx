@@ -1,29 +1,31 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { SetGameParams } from "./components/SetGameParams";
 import { Field } from "./components/Field";
+import { FakeField } from "./components/FakeField";
+
 import { useGame } from "./hooks/gameHook";
 import { GameStatus } from "./components/GameStatus";
 
 const defaultParams = {
-  width: 20,
-  height: 20,
+  width: 10,
+  height: 10,
   bombs: 10
 };
 
 export const App = () => {
   const [params, setParams] = useState(defaultParams);
 
-  const { rows, getRows, openCell, setFlag, time, isStart, bombs } = useGame(
-    params
-  );
-
-  useEffect(() => {
-    getRows();
-  }, []);
-
-  useEffect(() => {
-    getRows();
-  }, [params]);
+  const {
+    rows,
+    getRows,
+    openCell,
+    setFlag,
+    time,
+    isStart,
+    bombs,
+    disableParams,
+    setIsStart
+  } = useGame(params);
 
   const changeHandler = useCallback(
     e => {
@@ -36,6 +38,7 @@ export const App = () => {
   );
 
   const startGame = () => {
+    setIsStart(true);
     getRows();
   };
 
@@ -50,18 +53,22 @@ export const App = () => {
   return (
     <div className="field">
       <SetGameParams
-        isStart={isStart}
+        disableParams={disableParams}
         params={params}
         onChange={changeHandler}
       />
-      <button onClick={startGame} className="button">
-        NEW GAME
+      <button disabled={disableParams} onClick={startGame} className="button">
+        START GAME
       </button>
-      <Field
-        leftClickHandler={leftClickHandler}
-        clickHandler={clickHandler}
-        rows={rows}
-      />
+      {isStart ? (
+        <Field
+          leftClickHandler={leftClickHandler}
+          clickHandler={clickHandler}
+          rows={rows}
+        />
+      ) : (
+        <FakeField params={params} />
+      )}
       <GameStatus bombs={bombs} time={time} />
     </div>
   );
