@@ -12,7 +12,11 @@ export const FakeField = ({ params }) => {
     for (let i = 0; i < H; i++) {
       const row = [];
       for (let j = 0; j < W; j++) {
-        row.push(<td className="cell" key={"" + i + j}></td>);
+        row.push(
+          <td className="cell" key={"" + i + j}>
+            <div />
+          </td>
+        );
       }
       rows.push(<tr key={i}>{[row]}</tr>);
     }

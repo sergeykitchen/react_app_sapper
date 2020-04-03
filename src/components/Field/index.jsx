@@ -50,7 +50,7 @@ export const Field = ({ rows, clickHandler, leftClickHandler }) => {
                 key={index}
                 style={{ color: color }}
               >
-                {content}
+                <div>{content}</div>
               </td>
             );
           })}

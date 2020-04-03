@@ -52,15 +52,17 @@ export const App = () => {
       <button disabled={disableParams} onClick={letsPlay} className="button">
         START GAME
       </button>
-      {isStart ? (
-        <Field
-          leftClickHandler={leftClickHandler}
-          clickHandler={clickHandler}
-          rows={rows}
-        />
-      ) : (
-        <FakeField params={params} />
-      )}
+      <div className="field_container">
+        {isStart ? (
+          <Field
+            leftClickHandler={leftClickHandler}
+            clickHandler={clickHandler}
+            rows={rows}
+          />
+        ) : (
+          <FakeField params={params} />
+        )}
+      </div>
       <GameStatus bombs={bombs} time={time} />
     </div>
   );
