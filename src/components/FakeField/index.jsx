@@ -1,13 +1,13 @@
 import React from "react";
 
 const MIN_SIZE = 5;
-
+const MAX_SIZE = 25;
 export const FakeField = ({ params }) => {
   const getTable = () => {
     const rows = [];
 
-    const W = Math.max(MIN_SIZE, params.width);
-    const H = Math.max(MIN_SIZE, params.height);
+    const W = Math.max(MIN_SIZE, Math.min(MAX_SIZE, params.width));
+    const H = Math.max(MIN_SIZE, Math.min(MAX_SIZE, params.height));
 
     for (let i = 0; i < H; i++) {
       const row = [];

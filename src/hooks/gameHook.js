@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 
 let timer = null;
 const MIN_SIZE = 5;
+const MAX_SIZE = 25;
 const defaultParams = {
   width: 10,
   height: 10,
@@ -34,8 +35,8 @@ export const useGame = () => {
     let count = 0;
     const rows = [];
     let bombNumbers = [];
-    const W = Math.max(MIN_SIZE, width);
-    const H = Math.max(MIN_SIZE, height);
+    const W = Math.max(MIN_SIZE, Math.min(MAX_SIZE, width));
+    const H = Math.max(MIN_SIZE, Math.min(MAX_SIZE, height));
     const cells = W * H;
     const B = Math.max(1, Math.min(bombs, cells));
 
