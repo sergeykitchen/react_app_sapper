@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 
 let timer = null;
+const MIN_SIZE = 5;
+const defaultParams = {
+  width: 10,
+  height: 10,
+  bombs: 10
+};
 
 const convertTime = seconds => {
   const date = new Date(null);
@@ -8,24 +14,32 @@ const convertTime = seconds => {
   return date.toISOString().substr(11, 8);
 };
 
-export const useGame = params => {
+export const useGame = () => {
+  const [params, setParams] = useState(defaultParams);
   const [rowsData, setRows] = useState([]);
   const [isStart, setIsStart] = useState(false);
   const [time, setTime] = useState(0);
   const [bombs, setBombs] = useState(params.bombs);
   const [disableParams, setDisableParams] = useState(false);
 
+  const validateSettings = () => {};
+
+  const startGame = () => {
+    getRows();
+    setIsStart(true);
+  };
+
   const getRows = useCallback(() => {
-    setTime(0);
-    setDisableParams(true);
     const { bombs, width, height } = params;
-    setBombs(bombs);
     let count = 0;
     const rows = [];
     let bombNumbers = [];
-    const cells = width * height;
+    const W = Math.max(MIN_SIZE, width);
+    const H = Math.max(MIN_SIZE, height);
+    const cells = W * H;
+    const B = Math.max(1, Math.min(bombs, cells));
 
-    for (let i = 0, n = bombs; i < n; i++) {
+    for (let i = 0, n = B; i < n; i++) {
       let randInt = Math.floor(Math.random() * cells) + 0;
       if (bombNumbers.indexOf(randInt) != -1) {
         i--;
@@ -34,9 +48,9 @@ export const useGame = params => {
       bombNumbers.push(randInt);
     }
 
-    for (let i = 0, h = height; i < h; i++) {
+    for (let i = 0, h = H; i < h; i++) {
       let row = [];
-      for (let j = 0, w = width; j < w; j++) {
+      for (let j = 0, w = W; j < w; j++) {
         let cell = {
           id: "" + i + j,
           row: i,
@@ -78,6 +92,14 @@ export const useGame = params => {
         }
       }
     }
+    setTime(0);
+    setDisableParams(true);
+    setParams({
+      width: W,
+      height: H,
+      bombs: B
+    });
+    setBombs(B);
     setRows(rows);
   }, [params]);
 
@@ -181,7 +203,10 @@ export const useGame = params => {
     isStart,
     bombs,
     disableParams,
-    setIsStart
+    setIsStart,
+    startGame,
+    params,
+    setParams
   };
 };
 

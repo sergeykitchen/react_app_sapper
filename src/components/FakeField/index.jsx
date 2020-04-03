@@ -1,12 +1,17 @@
 import React from "react";
 
+const MIN_SIZE = 5;
+
 export const FakeField = ({ params }) => {
   const getTable = () => {
     const rows = [];
 
-    for (let i = 0; i < params.height; i++) {
+    const W = Math.max(MIN_SIZE, params.width);
+    const H = Math.max(MIN_SIZE, params.height);
+
+    for (let i = 0; i < H; i++) {
       const row = [];
-      for (let j = 0; j < params.width; j++) {
+      for (let j = 0; j < W; j++) {
         row.push(<td className="cell" key={"" + i + j}></td>);
       }
       rows.push(<tr key={i}>{[row]}</tr>);

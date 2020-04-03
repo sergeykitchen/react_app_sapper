@@ -6,26 +6,19 @@ import { FakeField } from "./components/FakeField";
 import { useGame } from "./hooks/gameHook";
 import { GameStatus } from "./components/GameStatus";
 
-const defaultParams = {
-  width: 10,
-  height: 10,
-  bombs: 10
-};
-
 export const App = () => {
-  const [params, setParams] = useState(defaultParams);
-
   const {
     rows,
-    getRows,
     openCell,
     setFlag,
     time,
     isStart,
     bombs,
     disableParams,
-    setIsStart
-  } = useGame(params);
+    startGame,
+    params,
+    setParams
+  } = useGame();
 
   const changeHandler = useCallback(
     e => {
@@ -37,17 +30,16 @@ export const App = () => {
     [params]
   );
 
-  const startGame = () => {
-    setIsStart(true);
-    getRows();
-  };
-
   const clickHandler = id => {
     openCell(id);
   };
 
   const leftClickHandler = id => {
     setFlag(id);
+  };
+
+  const letsPlay = () => {
+    startGame();
   };
 
   return (
@@ -57,7 +49,7 @@ export const App = () => {
         params={params}
         onChange={changeHandler}
       />
-      <button disabled={disableParams} onClick={startGame} className="button">
+      <button disabled={disableParams} onClick={letsPlay} className="button">
         START GAME
       </button>
       {isStart ? (
