@@ -10,7 +10,7 @@ import { Message } from "./components/Message";
 export const App = () => {
   const {
     rows,
-    openCell,
+    clickCellHandler,
     setFlag,
     time,
     isStart,
@@ -19,7 +19,8 @@ export const App = () => {
     startGame,
     params,
     setParams,
-    message
+    message,
+    restartGame
   } = useGame();
 
   const changeHandler = useCallback(
@@ -33,15 +34,11 @@ export const App = () => {
   );
 
   const clickHandler = id => {
-    openCell(id);
+    clickCellHandler(id);
   };
 
   const leftClickHandler = id => {
     setFlag(id);
-  };
-
-  const letsPlay = () => {
-    startGame();
   };
 
   return (
@@ -51,9 +48,15 @@ export const App = () => {
         params={params}
         onChange={changeHandler}
       />
-      <button disabled={disableParams} onClick={letsPlay} className="button">
-        START GAME
-      </button>
+      {disableParams ? (
+        <button onClick={restartGame} className="button">
+          NEW GAME
+        </button>
+      ) : (
+        <button onClick={startGame} className="button">
+          START GAME
+        </button>
+      )}
       <div className="field_container">
         {isStart ? (
           <Field

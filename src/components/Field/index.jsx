@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles.scss";
 
 const colors = [
   "rgb(203, 251, 11)",

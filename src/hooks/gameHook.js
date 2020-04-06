@@ -8,8 +8,8 @@ const defaultParams = {
   height: 10,
   bombs: 10
 };
-
 let saveCells = 0;
+let flags = 0;
 
 const convertTime = seconds => {
   const date = new Date(null);
@@ -31,7 +31,10 @@ export const useGame = () => {
   });
 
   const startGame = () => {
-    getRows();
+    setGameData();
+    setTime(0);
+    setDisableParams(true);
+    setBombs(flags);
     setIsStart(true);
     setMessage({
       ...message,
@@ -39,7 +42,13 @@ export const useGame = () => {
     });
   };
 
-  const getRows = useCallback(() => {
+  const restartGame = () => {
+    setTime(0);
+    setDisableParams(false);
+    setIsStart(false);
+  };
+
+  const setGameData = useCallback(() => {
     const { bombs, width, height } = params;
     let count = 0;
     const rows = [];
@@ -102,15 +111,14 @@ export const useGame = () => {
         }
       }
     }
-    setTime(0);
-    setDisableParams(true);
+    saveCells = W * H - B;
+    flags = B;
+
     setParams({
       width: W,
       height: H,
       bombs: B
     });
-    saveCells = W * H - B;
-    setBombs(B);
     setRows(rows);
   }, [params]);
 
@@ -118,13 +126,11 @@ export const useGame = () => {
     if (arr[i][j].isOpen) return;
     arr[i][j].isOpen = true;
     saveCells -= 1;
-    console.log("++++++++++saveCells", saveCells);
     if (!saveCells) {
       youWin();
       return;
     }
-
-    // if (arr[i][j].flag) flags++;
+    if (arr[i][j].flag) flags++;
     for (
       var k = Math.max(0, i - 1);
       k <= Math.min(i + 1, arr.length - 1);
@@ -180,9 +186,7 @@ export const useGame = () => {
     setRows(copy);
   };
 
-  const openCell = clickedCell => {
-    setIsStart(true);
-
+  const clickCellHandler = clickedCell => {
     const { row, cell } = clickedCell;
     if (clickedCell.isOpen) {
       return;
@@ -195,11 +199,13 @@ export const useGame = () => {
 
     if (!clickedCell.value) {
       openEmptyCells(+row, +cell);
+      setBombs(flags);
       return;
     }
 
     clickedCell.isOpen = true;
     saveCells -= 1;
+
     if (!saveCells) {
       youWin();
       return;
@@ -213,17 +219,16 @@ export const useGame = () => {
       return;
     }
 
-    let computedBombs;
     if (rowsData[row][cell].flag) {
       rowsData[row][cell].flag = false;
-      computedBombs = bombs + 1;
+      flags += 1;
     } else {
       rowsData[row][cell].flag = true;
-      computedBombs = bombs - 1;
+      flags -= 1;
     }
 
     setRows([...rowsData]);
-    setBombs(Math.max(0, computedBombs));
+    setBombs(Math.max(0, flags));
   };
 
   useEffect(() => {
@@ -237,8 +242,7 @@ export const useGame = () => {
 
   return {
     rows: rowsData,
-    getRows,
-    openCell,
+    clickCellHandler,
     setFlag,
     time: convertTime(time),
     isStart,
@@ -248,6 +252,7 @@ export const useGame = () => {
     startGame,
     params,
     setParams,
-    message
+    message,
+    restartGame
   };
 };
