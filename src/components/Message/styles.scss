@@ -1,0 +1,24 @@
+.message_container {
+  position: absolute;
+  top: -20%;
+  width: 100%;
+  text-align: center;
+  transition: top 0.5s;
+
+  &.shown {
+    top: calc(100% - 30px);
+  }
+  .message {
+    box-shadow: 2px 2px 2px rgb(147, 155, 136);
+    display: inline-block;
+    padding: 5px 5px;
+    width: 50%;
+    border-radius: 5px;
+    &.loose {
+      background-color: #f03a3a;
+    }
+    &.win {
+      background-color: #4e9df0;
+    }
+  }
+}

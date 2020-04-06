@@ -5,33 +5,33 @@ export const SetGameParams = React.memo(
   ({ onChange, params, disableParams }) => {
     return (
       <div className={`params ${disableParams ? "disabled" : ""}`}>
-        <label>
-          SET WIDTH
+        <div>
+          <label>SET WIDTH</label>
           <input
             name="width"
             onChange={onChange}
             type="number"
             value={params.width}
           />
-        </label>
-        <label>
-          SET HEIGHT
+        </div>
+        <div>
+          <label>SET HEIGHT</label>
           <input
             name="height"
             onChange={onChange}
             type="number"
             value={params.height}
           />
-        </label>
-        <label>
-          SET COUNT OF BOMBS
+        </div>
+        <div>
+          <label>SET COUNT OF BOMBS</label>
           <input
             name="bombs"
             onChange={onChange}
             type="number"
             value={params.bombs}
           />
-        </label>
+        </div>
       </div>
     );
   }

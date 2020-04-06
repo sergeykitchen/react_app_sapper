@@ -5,6 +5,7 @@ import { FakeField } from "./components/FakeField";
 
 import { useGame } from "./hooks/gameHook";
 import { GameStatus } from "./components/GameStatus";
+import { Message } from "./components/Message";
 
 export const App = () => {
   const {
@@ -17,7 +18,8 @@ export const App = () => {
     disableParams,
     startGame,
     params,
-    setParams
+    setParams,
+    message
   } = useGame();
 
   const changeHandler = useCallback(
@@ -64,6 +66,11 @@ export const App = () => {
         )}
       </div>
       <GameStatus bombs={bombs} time={time} />
+      <Message
+        status={message.status}
+        shown={message.shown}
+        text={message.text}
+      />
     </div>
   );
 };

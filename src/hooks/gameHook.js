@@ -9,9 +9,11 @@ const defaultParams = {
   bombs: 10
 };
 
+let saveCells = 0;
+
 const convertTime = seconds => {
   const date = new Date(null);
-  date.setSeconds(seconds); // specify value for SECONDS here
+  date.setSeconds(seconds);
   return date.toISOString().substr(11, 8);
 };
 
@@ -22,12 +24,19 @@ export const useGame = () => {
   const [time, setTime] = useState(0);
   const [bombs, setBombs] = useState(params.bombs);
   const [disableParams, setDisableParams] = useState(false);
-
-  const validateSettings = () => {};
+  const [message, setMessage] = useState({
+    status: "",
+    text: "",
+    shown: false
+  });
 
   const startGame = () => {
     getRows();
     setIsStart(true);
+    setMessage({
+      ...message,
+      shown: false
+    });
   };
 
   const getRows = useCallback(() => {
@@ -100,24 +109,21 @@ export const useGame = () => {
       height: H,
       bombs: B
     });
+    saveCells = W * H - B;
     setBombs(B);
     setRows(rows);
   }, [params]);
 
-  const gameOver = () => {
-    for (let i = 0; i < rowsData.length; i++) {
-      for (let j = 0; j < rowsData[i].length; j++) {
-        rowsData[i][j].isOpen = true;
-      }
-    }
-    setRows([...rowsData]);
-    //  setIsStart(false);
-    setDisableParams(false);
-  };
-
   const openCells = (arr, i, j) => {
     if (arr[i][j].isOpen) return;
     arr[i][j].isOpen = true;
+    saveCells -= 1;
+    console.log("++++++++++saveCells", saveCells);
+    if (!saveCells) {
+      youWin();
+      return;
+    }
+
     // if (arr[i][j].flag) flags++;
     for (
       var k = Math.max(0, i - 1);
@@ -138,20 +144,50 @@ export const useGame = () => {
     }
   };
 
+  const youWin = () => {
+    for (let i = 0; i < rowsData.length; i++) {
+      for (let j = 0; j < rowsData[i].length; j++) {
+        rowsData[i][j].isOpen = true;
+      }
+    }
+    setRows([...rowsData]);
+    setDisableParams(false);
+    setMessage({
+      shown: true,
+      text: `You win! Your time is ${convertTime(time)}`,
+      status: "win"
+    });
+  };
+
+  const gameOver = () => {
+    for (let i = 0; i < rowsData.length; i++) {
+      for (let j = 0; j < rowsData[i].length; j++) {
+        rowsData[i][j].isOpen = true;
+      }
+    }
+    setRows([...rowsData]);
+    setDisableParams(false);
+    setMessage({
+      shown: true,
+      text: "you loose",
+      status: "loose"
+    });
+  };
+
   const openEmptyCells = (row, cell) => {
-    if (cell.isOpen) return;
     const copy = [...rowsData];
     openCells(copy, row, cell);
-
     setRows(copy);
   };
 
   const openCell = clickedCell => {
     setIsStart(true);
+
     const { row, cell } = clickedCell;
     if (clickedCell.isOpen) {
       return;
     }
+
     if (clickedCell.isBomb) {
       gameOver();
       return;
@@ -162,8 +198,12 @@ export const useGame = () => {
       return;
     }
 
-    //desiredCell.isOpen = true;
     clickedCell.isOpen = true;
+    saveCells -= 1;
+    if (!saveCells) {
+      youWin();
+      return;
+    }
     setRows([...rowsData]);
   };
 
@@ -207,8 +247,7 @@ export const useGame = () => {
     setIsStart,
     startGame,
     params,
-    setParams
+    setParams,
+    message
   };
 };
-
-// noBombCells = width * height - bombNumbers.length;
