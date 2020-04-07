@@ -98,13 +98,13 @@ module.exports = {
       minify: {
         collapseWhitespace: !isDev
       }
-    })
-    // new CopyWebpackPlugin([
-    //   {
-    //     from: path.resolve(__dirname, "src", "assets", "product-images"),
-    //     to: path.resolve(__dirname, "dist", "assets")
-    //   }
-    //   //   { from: path.resolve(__dirname, "favicons"), to: "favicons" }
-    // ])
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, "src", "images"),
+        to: path.resolve(__dirname, "dist", "images")
+      }
+      //   { from: path.resolve(__dirname, "favicons"), to: "favicons" }
+    ])
   ]
 };
