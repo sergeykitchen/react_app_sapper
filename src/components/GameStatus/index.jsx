@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./styles.scss";
 
-export const GameStatus = ({ time = 0, bombs }) => {
+export const GameStatus = React.memo(({ time, bombs }) => {
   return (
     <>
       <table className="status_table">
@@ -14,4 +14,4 @@ export const GameStatus = ({ time = 0, bombs }) => {
       </table>
     </>
   );
-};
+});

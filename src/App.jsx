@@ -20,26 +20,32 @@ export const App = () => {
     params,
     setParams,
     message,
-    restartGame
+    restartGame,
   } = useGame();
 
   const changeHandler = useCallback(
-    e => {
+    (e) => {
       setParams({
         ...params,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       });
     },
     [params]
   );
 
-  const clickHandler = id => {
-    clickCellHandler(id);
-  };
+  const clickHandler = useCallback(
+    (id) => {
+      clickCellHandler(id);
+    },
+    [rows]
+  );
 
-  const leftClickHandler = id => {
-    setFlag(id);
-  };
+  const leftClickHandler = useCallback(
+    (id) => {
+      setFlag(id);
+    },
+    [rows]
+  );
 
   return (
     <div className="field">

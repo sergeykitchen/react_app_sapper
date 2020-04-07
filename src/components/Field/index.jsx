@@ -9,19 +9,19 @@ const colors = [
   "rgb(203, 251, 11)",
   "rgb(27, 174, 237)",
   "rgb(215, 36, 144)",
-  "rgb(230, 138, 25)"
+  "rgb(230, 138, 25)",
 ];
 
-export const Field = ({ rows, clickHandler, leftClickHandler }) => {
-  const onClick = id => () => {
+export const Field = React.memo(({ rows, clickHandler, leftClickHandler }) => {
+  const onClick = (id) => () => {
     clickHandler(id);
   };
-  const onContextMenu = id => e => {
+  const onContextMenu = (id) => (e) => {
     e.preventDefault();
     leftClickHandler(id);
   };
 
-  const getTable = rows => {
+  const getTable = (rows) => {
     return rows.map((row, index) => {
       return (
         <tr key={index}>
@@ -30,7 +30,7 @@ export const Field = ({ rows, clickHandler, leftClickHandler }) => {
             let additionClass = "";
             let color = "";
             if (cell.flag) {
-              content = "⚑";
+              content = <span>&#10060;</span>;
             }
             if (cell.isOpen) {
               color = colors[cell.value - 1];
@@ -65,4 +65,4 @@ export const Field = ({ rows, clickHandler, leftClickHandler }) => {
       <tbody>{getTable(rows)}</tbody>
     </table>
   );
-};
+});

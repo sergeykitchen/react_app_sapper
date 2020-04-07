@@ -2,10 +2,9 @@ import React from "react";
 
 const MIN_SIZE = 5;
 const MAX_SIZE = 25;
-export const FakeField = ({ params }) => {
+export const FakeField = React.memo(({ params }) => {
   const getTable = () => {
     const rows = [];
-
     const W = Math.max(MIN_SIZE, Math.min(MAX_SIZE, params.width));
     const H = Math.max(MIN_SIZE, Math.min(MAX_SIZE, params.height));
 
@@ -28,4 +27,4 @@ export const FakeField = ({ params }) => {
       <tbody>{getTable()}</tbody>
     </table>
   );
-};
+});
