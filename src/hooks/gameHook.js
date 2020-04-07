@@ -6,12 +6,12 @@ const MAX_SIZE = 25;
 const defaultParams = {
   width: 10,
   height: 10,
-  bombs: 10
+  bombs: 10,
 };
 let saveCells = 0;
 let flags = 0;
 
-const convertTime = seconds => {
+const convertTime = (seconds) => {
   const date = new Date(null);
   date.setSeconds(seconds);
   return date.toISOString().substr(11, 8);
@@ -27,7 +27,7 @@ export const useGame = () => {
   const [message, setMessage] = useState({
     status: "",
     text: "",
-    shown: false
+    shown: false,
   });
 
   const startGame = () => {
@@ -38,7 +38,7 @@ export const useGame = () => {
     setIsStart(true);
     setMessage({
       ...message,
-      shown: false
+      shown: false,
     });
   };
 
@@ -71,14 +71,12 @@ export const useGame = () => {
       let row = [];
       for (let j = 0, w = W; j < w; j++) {
         let cell = {
-          id: "" + i + j,
           row: i,
           cell: j,
           value: "",
           isBomb: false,
           isOpen: false,
           flag: false,
-          check: false
         };
         if (bombNumbers.indexOf(count) != -1) {
           cell.isBomb = true;
@@ -117,7 +115,7 @@ export const useGame = () => {
     setParams({
       width: W,
       height: H,
-      bombs: B
+      bombs: B,
     });
     setRows(rows);
   }, [params]);
@@ -142,6 +140,7 @@ export const useGame = () => {
         l++
       ) {
         if (arr[i][j].value) {
+          arr[i][j].flag ?? flags++;
           return;
         }
 
@@ -161,7 +160,7 @@ export const useGame = () => {
     setMessage({
       shown: true,
       text: `You win! Your time is ${convertTime(time)}`,
-      status: "win"
+      status: "win",
     });
   };
 
@@ -176,7 +175,7 @@ export const useGame = () => {
     setMessage({
       shown: true,
       text: "you loose",
-      status: "loose"
+      status: "loose",
     });
   };
 
@@ -186,7 +185,7 @@ export const useGame = () => {
     setRows(copy);
   };
 
-  const clickCellHandler = clickedCell => {
+  const clickCellHandler = (clickedCell) => {
     const { row, cell } = clickedCell;
     if (clickedCell.isOpen) {
       return;
@@ -203,6 +202,11 @@ export const useGame = () => {
       return;
     }
 
+    if (clickedCell.flag) {
+      flags++;
+      setBombs(flags);
+    }
+
     clickedCell.isOpen = true;
     saveCells -= 1;
 
@@ -213,7 +217,7 @@ export const useGame = () => {
     setRows([...rowsData]);
   };
 
-  const setFlag = clickedCell => {
+  const setFlag = (clickedCell) => {
     const { row, cell } = clickedCell;
     if (rowsData[row][cell].isOpen) {
       return;
@@ -253,6 +257,6 @@ export const useGame = () => {
     params,
     setParams,
     message,
-    restartGame
+    restartGame,
   };
 };

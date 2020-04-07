@@ -4,7 +4,7 @@
   width: 100%;
   text-align: center;
   transition: top 0.5s;
-
+  left: 0;
   &.shown {
     top: calc(100% - 30px);
   }
