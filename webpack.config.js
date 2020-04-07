@@ -8,7 +8,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-const optimization = isDev => {
+const optimization = (isDev) => {
   const config = {};
 
   if (!isDev) {
@@ -31,18 +31,17 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath
+    publicPath,
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
-    //  https: true,
-    historyApiFallback: true
+    historyApiFallback: true,
   },
 
   optimization: optimization(isDev),
   devtool: isDev ? "source-map" : "",
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: [".js", ".jsx"],
   },
 
   module: {
@@ -50,7 +49,7 @@ module.exports = {
       {
         test: [/\.js$/, /\.jsx/],
         include: path.resolve(__dirname, "src"),
-        use: ["babel-loader"]
+        use: ["babel-loader"],
       },
       {
         // For production, we output a separately cachable stylesheet.
@@ -58,10 +57,10 @@ module.exports = {
         use: [
           isDev ? "style-loader" : MiniCssExtractPlugin.loader,
           {
-            loader: "css-loader"
+            loader: "css-loader",
           },
-          "postcss-loader"
-        ]
+          "postcss-loader",
+        ],
       },
       {
         // For production, we output a separately cachable stylesheet.
@@ -71,24 +70,24 @@ module.exports = {
           isDev ? "style-loader" : MiniCssExtractPlugin.loader,
           // Remove or comment out the `modules` property (or set it to `false`) to disable css-modules.
           {
-            loader: "css-loader"
+            loader: "css-loader",
           },
           "postcss-loader",
-          "sass-loader"
-        ]
+          "sass-loader",
+        ],
       },
       {
         test: [/\.jpg$/, /\.png/],
         loader: "file-loader",
         options: {
-          name: "static/media/[name].[ext]"
-        }
-      }
-    ]
+          name: "static/media/[name].[ext]",
+        },
+      },
+    ],
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": {}
+      "process.env": {},
     }),
     new MiniCssExtractPlugin(),
     // Generates an `index.html` file with the <script> injected.
@@ -96,15 +95,15 @@ module.exports = {
       inject: true,
       template: "./index.html",
       minify: {
-        collapseWhitespace: !isDev
-      }
+        collapseWhitespace: !isDev,
+      },
     }),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, "src", "images"),
-        to: path.resolve(__dirname, "dist", "images")
-      }
-      //   { from: path.resolve(__dirname, "favicons"), to: "favicons" }
-    ])
-  ]
+        from: path.resolve(__dirname, "src", "images", "favicon.ico"),
+        to: path.resolve(__dirname, "dist", "images"),
+      },
+      // { from: path.resolve(__dirname, "favicons"), to: "favicons" },
+    ]),
+  ],
 };
