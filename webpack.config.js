@@ -30,11 +30,11 @@ module.exports = {
   entry: "./index.js",
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist/app"),
     publicPath,
   },
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, "dist/app"),
     historyApiFallback: true,
   },
 
@@ -101,7 +101,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, "src", "images", "favicon.ico"),
-        to: path.resolve(__dirname, "dist", "images"),
+        to: path.resolve(__dirname, "dist/app", "images"),
       },
       // { from: path.resolve(__dirname, "favicons"), to: "favicons" },
     ]),

@@ -162,6 +162,7 @@ export const useGame = () => {
       text: `You win! Your time is ${convertTime(time)}`,
       status: "win",
     });
+    // clearTimeout(timer);
   };
 
   const gameOver = () => {
@@ -177,6 +178,7 @@ export const useGame = () => {
       text: "you loose",
       status: "loose",
     });
+    // clearTimeout(timer);
   };
 
   const openEmptyCells = (row, cell) => {
@@ -237,11 +239,14 @@ export const useGame = () => {
 
   useEffect(() => {
     if (disableParams) {
-      timer = setInterval(() => {
+      timer = setTimeout(() => {
         setTime(time + 1);
       }, 1000);
     }
-    return () => clearInterval(timer);
+    return () => {
+      clearTimeout(timer);
+      timer = null;
+    };
   }, [time, disableParams]);
 
   return {

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Sapper the Game",
+  "description": "Classic Sapper",
+  "version": "1.0.0",
+
+  "browser_action": {
+    "default_icon": "app/static/media/poop.png"
+  },
+  "permissions": ["tabs"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
