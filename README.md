@@ -1,1 +1,1 @@
-# react_app_sapper
+# Minesweeper game
